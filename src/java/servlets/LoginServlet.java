@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import models.Role;
 import models.User;
 import services.AccountService;
 
@@ -51,8 +52,10 @@ public class LoginServlet extends HttpServlet {
 
         AccountService as = new AccountService();
         User user = null;
+        Role role = null;
         try {
             user = as.login(email, password);
+            role = user.getRole();
         } catch (Exception ex) {
 
         }
@@ -61,8 +64,10 @@ public class LoginServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             return;
         }
+        
         session.setAttribute("email", email);
-        response.sendRedirect("users");
+        session.setAttribute("role", role);
+        response.sendRedirect("home");
     }
 
 }
